@@ -16,8 +16,6 @@
 ### Association
 
 - has_many :items
-- has_many :comments
-- has_many :comments
 - has_one  :purchases
 
 ## items テーブル
@@ -31,7 +29,7 @@
 | delivery_charge_id | integer    | null: false                     |
 | delivery_place_id  | integer    | null: false                     |
 | delivery_day_id    | integer    | null: false                     |
-| price              | decimal    | null: false                     |
+| price              | integer    | null: false                     |
 | user               | references | null: false, foreign_key: true  |
 
 ### Association
@@ -44,7 +42,7 @@
 | Column             | Type       | Options                         |
 | ------------------ | ---------- | ------------------------------- |
 | post_code          | string     | null: false                     |
-| prefectures        | integer    | null: false                     |
+| delivery_place_id  | integer    | null: false                     |
 | city               | string     | null: false                     |
 | street_address     | string     | null: false                     |
 | building_name      | string     |                                 |
