@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates :last_name_kana, presence: true, format: { with: /\A[ァ-ヶー－]+\z/, message: 'はカタカナで入力してください。' }
   validates :first_name_kana, presence: true, format: { with: /\A[ァ-ヶー－]+\z/, message: 'はカタカナで入力してください。' }
   validates :birthday, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "は有効なメールアドレス形式で入力してください" }
   validate :password_complexity
 
   private

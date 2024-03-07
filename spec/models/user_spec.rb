@@ -36,7 +36,7 @@ RSpec.describe User, type: :model do
       it 'is invalid without "@" in the email' do
         @user.email = 'userexample.com'
         expect(@user).to_not be_valid
-        expect(@user.errors[:email]).to include("is invalid")
+        expect(@user.errors[:email]).to include("は有効なメールアドレス形式で入力してください")
       end
   
       # パスワード関連
