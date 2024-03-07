@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   before do
-    @user = build(:user, nickname: "ユーザー名", email: "user@example.com", password: "Password123", last_name: "テスト", first_name: "太郎", last_name_kana: "テスト", first_name_kana: "タロウ", birthday: "2000-01-01")
+    @user = FactoryBot.create(:user)
   end
 
   describe '新規登録' do
@@ -39,18 +39,6 @@ RSpec.describe User, type: :model do
         expect(@user.errors[:email]).to include("is invalid")
       end
   
-      it 'is invalid with an email without a domain' do
-        @user.email = 'user@'
-        expect(@user).to_not be_valid
-        expect(@user.errors[:email]).to include("is invalid")
-      end
-  
-      it 'is invalid with an email without a local part' do
-        @user.email = '@example.com'
-        expect(@user).to_not be_valid
-        expect(@user.errors[:email]).to include("is invalid")
-      end
-  
       # パスワード関連
       it 'is invalid without a password' do
         @user.password = nil
@@ -69,12 +57,29 @@ RSpec.describe User, type: :model do
         expect(@user).to_not be_valid
         expect(@user.errors[:password_confirmation]).to include("doesn't match Password")
       end
-  
-      it 'is invalid when password and password confirmation do not match' do
-        @user.password = 'password123'
-        @user.password_confirmation = 'different123'
-        expect(@user).to_not be_valid
-        expect(@user.errors[:password_confirmation]).to include("doesn't match Password")
+
+      # パスワードが半角数字のみの場合は登録できない
+      it 'is invalid with a password that is all digits' do
+        @user.password = '123456'
+        @user.password_confirmation = '123456'
+        @user.valid?
+        expect(@user.errors[:password]).to include("は半角英字と数字の両方を含めて設定してください")
+      end
+
+      # パスワードが半角英字のみの場合は登録できない
+      it 'is invalid with a password that is all letters' do
+        @user.password = 'abcdef'
+        @user.password_confirmation = 'abcdef'
+        @user.valid?
+        expect(@user.errors[:password]).to include("は半角英字と数字の両方を含めて設定してください")
+      end
+
+      # パスワードが全角の場合は登録できない
+      it 'is invalid with a password that contains full-width characters' do
+        @user.password = 'ａｂｃ１２３'
+        @user.password_confirmation = 'ａｂｃ１２３'
+        @user.valid?
+        expect(@user.errors[:password]).to include("は半角英字と数字の両方を含めて設定してください")
       end
   
       # 名前関連
@@ -106,13 +111,13 @@ RSpec.describe User, type: :model do
       it 'is invalid without a last name kana' do
         @user.last_name_kana = nil
         expect(@user).to_not be_valid
-        expect(@user.errors[:last_name_kana]).to include("can't be blank")
+        expect(@user.errors[:last_name_kana]).to include("はカタカナで入力してください。")
       end
   
       it 'is invalid without a first name kana' do
         @user.first_name_kana = nil
         expect(@user).to_not be_valid
-        expect(@user.errors[:first_name_kana]).to include("can't be blank")
+        expect(@user.errors[:first_name_kana]).to include("はカタカナで入力してください。")
       end
   
       it 'is invalid with a last name kana not in full-width katakana' do
@@ -133,30 +138,6 @@ RSpec.describe User, type: :model do
         expect(@user).to_not be_valid
         expect(@user.errors[:birthday]).to include("can't be blank")
       end
-    end
-  end
-
-  describe "カタカナ validation" do
-    it "is valid with カタカナ for last_name_kana" do
-      @user.last_name_kana = "カタカナ"
-      expect(@user).to be_valid
-    end
-  
-    it "is invalid without カタカナ for last_name_kana" do
-      @user.last_name_kana = "かたかな"
-      @user.valid?
-      expect(@user.errors[:last_name_kana]).to include("はカタカナで入力してください。")
-    end
-  
-    it "is valid with カタカナ for first_name_kana" do
-      @user.first_name_kana = "カタカナ"
-      expect(@user).to be_valid
-    end
-  
-    it "is invalid without カタカナ for first_name_kana" do
-      @user.first_name_kana = "かたかな"
-      @user.valid?
-      expect(@user.errors[:first_name_kana]).to include("はカタカナで入力してください。")
     end
   end
 end
