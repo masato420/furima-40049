@@ -7,7 +7,7 @@ class Item < ApplicationRecord
   belongs_to :delivery_charge
   belongs_to :delivery_place
   belongs_to :delivery_day
-  has_one    :purchase
+  #has_one    :purchase
   has_one_attached :image
 
   validates :image, presence: true

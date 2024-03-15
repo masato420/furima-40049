@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Item, type: :model do
   before do
-    @user = FactoryBot.create(:user) 
-    @item = FactoryBot.build(:item, user_id: @user.id)
+    @user = FactoryBot.create(:user)
+    @item = FactoryBot.build(:item, user: @user)
   end
 
   describe '新規登録' do
@@ -89,6 +89,16 @@ RSpec.describe Item, type: :model do
           @item.price = '三百円'
           @item.valid?
           expect(@item.errors[:price]).to include("is not a number")
+        end
+      end
+
+      describe 'アソシエーションの検証' do
+        context 'userが紐づいていない場合' do
+          it '登録できないこと' do
+            item = FactoryBot.build(:item, user: nil)
+            item.valid?
+            expect(item.errors[:user]).to include("must exist")
+          end
         end
       end
     end

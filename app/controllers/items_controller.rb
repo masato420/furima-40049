@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new]
 
   def index
-    @items = Item.order("created_at DESC")
+    #@items = Item.order("created_at DESC")
   end
 
   def new
@@ -11,16 +11,11 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    if @item.image.attached?
       if @item.save
         redirect_to root_path, notice: 'Item was successfully created.'
       else
         render :new, status: :unprocessable_entity
       end
-    else
-      @item.errors.add(:image, 'must be attached')
-      render :new
-    end
   end
 
   private
