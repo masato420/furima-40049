@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :edit, :update]
-  before_action :set_item, only: [:edit, :update, :show]
-  before_action :redirect_unless_owner, only: [:edit, :update]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destory]
+  before_action :set_item, only: [:edit, :update, :show, :destroy]
+  before_action :redirect_unless_owner, only: [:edit, :update, :destory]
 
   def index
     @items = Item.order("created_at DESC")
@@ -31,6 +31,14 @@ class ItemsController < ApplicationController
       redirect_to @item, notice: 'Item was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @item.destroy
+      redirect_to items_path, notice: 'Item was successfully destroyed.'
+    else
+      redirect_to @item, alert: 'Something went wrong. The item could not be destroyed.'
     end
   end
 
