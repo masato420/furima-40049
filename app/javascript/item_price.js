@@ -1,14 +1,19 @@
 window.addEventListener('turbo:load', () => {
   const priceInput = document.getElementById("item-price");
-  priceInput.addEventListener("input", () => {
-    const inputValue = priceInput.value;
-    const addTaxDom = document.getElementById("add-tax-price");
-    const profitDom = document.getElementById("profit");
+  if (priceInput) { // priceInputが存在するか確認
+    priceInput.addEventListener("input", () => {
+      const inputValue = priceInput.value;
+      const addTaxDom = document.getElementById("add-tax-price");
+      const profitDom = document.getElementById("profit");
 
-    const tax = Math.floor(inputValue * 0.1);
-    const profit = Math.floor(inputValue - tax);
+      // addTaxDomとprofitDomが存在するか確認
+      if (addTaxDom && profitDom) {
+        const tax = Math.floor(inputValue * 0.1);
+        const profit = Math.floor(inputValue - tax);
 
-    addTaxDom.innerHTML = tax;
-    profitDom.innerHTML = profit;
-  })
+        addTaxDom.innerHTML = tax;
+        profitDom.innerHTML = profit;
+      }
+    });
+  }
 });

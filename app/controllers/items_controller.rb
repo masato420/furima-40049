@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :edit, :update, :destory]
+  before_action :authenticate_user!, only: [:new, :edit, :update, :destroy]
   before_action :set_item, only: [:edit, :update, :show, :destroy]
-  before_action :redirect_unless_owner, only: [:edit, :update, :destory]
+  before_action :redirect_unless_owner, only: [:edit, :update, :destroy]
+  before_action :redirect_if_sold, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.order("created_at DESC")
@@ -12,12 +13,12 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = Item.new(item_params)
-      if @item.save
-        redirect_to root_path, notice: 'Item was successfully created.'
-      else
-        render :new, status: :unprocessable_entity
-      end
+    @item = current_user.items.build(item_params)
+    if @item.save
+      redirect_to root_path, notice: 'Item was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def show
@@ -44,18 +45,15 @@ class ItemsController < ApplicationController
 
   private
 
+  def item_params
+    params.require(:item).permit(:item_name, :explanation, :category_id, :condition_id, :delivery_charge_id, :delivery_place_id, :delivery_day_id, :price, :image)
+  end
+
   def set_item
     @item = Item.find(params[:id])
   end
 
   def redirect_unless_owner
-    unless current_user.id == @item.user_id
-      redirect_to root_path, alert: 'アクセス権限がありません'
-    end
+    redirect_to root_path, alert: 'アクセス権限がありません' unless current_user.id == @item.user_id
   end
-
-  def item_params
-    params.require(:item).permit(:image, :item_name, :explanation, :category_id, :condition_id, :delivery_charge_id, :delivery_place_id, :delivery_day_id, :price).merge(user_id: current_user.id)
-  end
-
 end
