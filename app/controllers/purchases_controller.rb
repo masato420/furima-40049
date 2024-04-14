@@ -2,6 +2,7 @@ class PurchasesController < ApplicationController
   before_action :set_item, only: [:new, :edit, :update, :show, :destroy, :create, :another_action_if_needed]
   before_action :authenticate_user!, only: [:new, :create]
   before_action :redirect_if_sold, only: [:new, :edit, :update, :destroy]
+  before_action :redirect_if_seller, only: [:new, :create]
 
   def create
     @order = Order.new(order_params)
@@ -36,6 +37,12 @@ class PurchasesController < ApplicationController
 
   def set_item
     @item = Item.find(params[:item_id])
+  end
+
+  def redirect_if_seller
+    if current_user.id == @item.user_id
+      redirect_to root_path, alert: "自身が出品した商品の購入ページにはアクセスできません。"
+    end
   end
 
   def order_params

@@ -56,4 +56,10 @@ class ItemsController < ApplicationController
   def redirect_unless_owner
     redirect_to root_path, alert: 'アクセス権限がありません' unless current_user.id == @item.user_id
   end
+
+  def redirect_if_sold
+    if @item.sold?
+      redirect_to root_path, alert: "この商品は既に売却済みです。"
+    end
+  end
 end

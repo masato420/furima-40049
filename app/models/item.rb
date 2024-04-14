@@ -10,6 +10,9 @@ class Item < ApplicationRecord
   has_one    :purchase
   has_one_attached :image
 
+  def sold?
+    purchase.present?
+  end
   validates :user, presence: true
   validates :image, presence: true
   validates :item_name, presence: true
