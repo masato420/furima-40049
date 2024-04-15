@@ -46,7 +46,7 @@ class PurchasesController < ApplicationController
   end
 
   def order_params
-    params.require(:order).permit(:post_code, :delivery_place_id, :city, :street_address, :building_name, :telephone, :purchase).merge(user_id: current_user.id, item_id: @item.id, token: params[:token])
+    params.require(:order).permit(:post_code, :delivery_place_id, :city, :street_address, :building_name, :telephone).merge(user_id: current_user.id, item_id: @item.id, token: params[:token])
   end
 
   def redirect_if_sold
