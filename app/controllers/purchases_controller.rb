@@ -25,11 +25,13 @@ class PurchasesController < ApplicationController
         flash.now[:errors] ||= []
         flash.now[:errors] << message
       end
+      gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
       render :new, status: :unprocessable_entity
     end
   end
   
   def new
+    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
     @order = Order.new
   end
 
