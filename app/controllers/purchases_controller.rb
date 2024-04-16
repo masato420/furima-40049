@@ -1,7 +1,7 @@
 class PurchasesController < ApplicationController
-  before_action :set_item, only: [:new, :edit, :update, :show, :destroy, :create, :another_action_if_needed]
+  before_action :set_item, only: [:new, :create]
   before_action :authenticate_user!, only: [:new, :create]
-  before_action :redirect_if_sold, only: [:new, :edit, :update, :destroy]
+  before_action :redirect_if_sold, only: [:new]
   before_action :redirect_if_seller, only: [:new, :create]
 
   def create

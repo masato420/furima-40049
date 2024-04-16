@@ -1,4 +1,3 @@
-console.log("test")
 // グローバルスコープでpay関数を定義
 const pay = () => {
   const publicKey = gon.public_key
