@@ -42,7 +42,7 @@ RSpec.describe Order, type: :model do
     end
 
     it '都道府県が必須であること' do
-      @order.delivery_place_id = ''
+      @order.delivery_place_id = 0
       @order.valid?
       expect(@order.errors.full_messages).to include "Delivery place can't be blank"
     end
@@ -88,5 +88,18 @@ RSpec.describe Order, type: :model do
       @order.valid?
       expect(@order.errors.full_messages).to include "Telephone is invalid."
     end
+
+    it 'userが存在しないと購入できない' do
+      @order.user_id = nil  # user_idをnilに設定
+      @order.valid?
+      expect(@order.errors.full_messages).to include("User can't be blank")
+    end
+
+    it 'itemが存在しないと購入できない' do
+      @order.item_id = nil  # item_idをnilに設定
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Item can't be blank")
+    end
+
   end
 end
