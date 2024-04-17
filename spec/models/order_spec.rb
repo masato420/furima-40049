@@ -20,7 +20,17 @@ RSpec.describe Order, type: :model do
       @order.token = 'tok_abcdefghijk00000000000000000'
       expect(@order).to be_valid
     end
+
+    it '@orderが有効であること' do
+      expect(@order).to be_valid
+    end
+
+    it '建物名が空でも登録できること' do
+      @order.building_name = ''
+      expect(@order).to be_valid
+    end
   end
+
 
   context '異常系テスト' do
     it 'クレジットカード情報が必須であること' do
