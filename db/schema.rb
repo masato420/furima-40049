@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_10_151509) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_11_115943) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,12 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_10_151509) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "articles", charset: "utf8", force: :cascade do |t|
-    t.integer "category_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "items", charset: "utf8", force: :cascade do |t|
     t.string "item_name", null: false
     t.text "explanation", null: false
@@ -58,6 +52,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_10_151509) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
+  create_table "purchases", charset: "utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.integer "item_id"
+  end
+
+  create_table "shippings", charset: "utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "purchase_id"
+    t.string "post_code"
+    t.integer "delivery_place_id"
+    t.string "city"
+    t.string "street_address"
+    t.string "building_name"
+    t.string "telephone"
   end
 
   create_table "users", charset: "utf8", force: :cascade do |t|
