@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_11_115943) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_27_134349) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_11_115943) do
   end
 
   create_table "items", charset: "utf8", force: :cascade do |t|
-    t.string "item_name", null: false
+    t.string "item_name", default: "", null: false
     t.text "explanation", null: false
     t.integer "category_id", null: false
     t.integer "condition_id", null: false
@@ -55,22 +55,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_11_115943) do
   end
 
   create_table "purchases", charset: "utf8", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "item_id"
+    t.index ["item_id"], name: "index_purchases_on_item_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
   end
 
   create_table "shippings", charset: "utf8", force: :cascade do |t|
+    t.string "post_code", null: false
+    t.integer "delivery_place_id", null: false
+    t.string "city", null: false
+    t.string "street_address", null: false
+    t.string "building_name", null: false
+    t.string "telephone", null: false
+    t.bigint "purchase_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "purchase_id"
-    t.string "post_code"
-    t.integer "delivery_place_id"
-    t.string "city"
-    t.string "street_address"
-    t.string "building_name"
-    t.string "telephone"
+    t.index ["purchase_id"], name: "index_shippings_on_purchase_id"
   end
 
   create_table "users", charset: "utf8", force: :cascade do |t|
@@ -92,4 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_11_115943) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "items", "users"
+  add_foreign_key "purchases", "items"
+  add_foreign_key "purchases", "users"
+  add_foreign_key "shippings", "purchases"
 end
