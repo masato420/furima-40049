@@ -53,6 +53,10 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def some_action
+    gon.my_key = "Some value"
+  end
+
   def redirect_unless_owner
     redirect_to root_path, alert: 'アクセス権限がありません' unless current_user.id == @item.user_id
   end

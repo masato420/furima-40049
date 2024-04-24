@@ -4,7 +4,7 @@ class Order
 
   with_options presence: true do
     validates :post_code, format: { with: /\A\d{3}-\d{4}\z/, message: "is invalid. Include hyphen(-)" }
-    validates :delivery_place_id, numericality: { other_than: 0, message: "can't be blank" }
+    validates :delivery_place_id, presence: true, numericality: { other_than: 1, message: "can't be blank" }
     validates :city
     validates :street_address
     validates :telephone, format: { with: /\A\d{10,11}\z/, message: "is invalid." }
